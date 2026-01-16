@@ -125,23 +125,29 @@ main() {
             echo "1) Bash"
             echo "2) Zsh"
             echo "3) Both"
-            read -t 30 -p "Enter your choice (1-3): " shell_choice
+            read -t 60 -p "Enter your choice (1-3): " shell_choice
             
-            case $shell_choice in
-                1)
-                    INSTALL_SHELL="bash"
-                    ;;
-                2)
-                    INSTALL_SHELL="zsh"
-                    ;;
-                3)
-                    INSTALL_SHELL="both"
-                    ;;
-                *)
-                    print_error "Invalid choice. Exiting."
-                    exit 1
-                    ;;
-            esac
+            # Handle timeout or empty input
+            if [ -z "$shell_choice" ]; then
+                print_warning "No input received. Defaulting to Bash configuration."
+                INSTALL_SHELL="bash"
+            else
+                case $shell_choice in
+                    1)
+                        INSTALL_SHELL="bash"
+                        ;;
+                    2)
+                        INSTALL_SHELL="zsh"
+                        ;;
+                    3)
+                        INSTALL_SHELL="both"
+                        ;;
+                    *)
+                        print_error "Invalid choice. Exiting."
+                        exit 1
+                        ;;
+                esac
+            fi
         fi
     else
         print_info "Detected shell: ${DETECTED_SHELL}"
@@ -166,11 +172,9 @@ main() {
         
         # Download bash files
         if ! download_file ".bashrc" "${TEMP_DIR}/.bashrc"; then
-            print_error "Failed to download Bash configuration files. Installation aborted."
             exit 1
         fi
         if ! download_file ".bash_profile" "${TEMP_DIR}/.bash_profile"; then
-            print_error "Failed to download Bash configuration files. Installation aborted."
             exit 1
         fi
         
@@ -189,11 +193,9 @@ main() {
         
         # Download zsh files
         if ! download_file ".zshrc" "${TEMP_DIR}/.zshrc"; then
-            print_error "Failed to download Zsh configuration files. Installation aborted."
             exit 1
         fi
         if ! download_file ".zprofile" "${TEMP_DIR}/.zprofile"; then
-            print_error "Failed to download Zsh configuration files. Installation aborted."
             exit 1
         fi
         
@@ -210,7 +212,6 @@ main() {
     # Download and install vim configuration
     print_info "Installing Vim configuration..."
     if ! download_file ".vimrc" "${TEMP_DIR}/.vimrc"; then
-        print_error "Failed to download Vim configuration. Installation aborted."
         exit 1
     fi
     backup_file "${HOME}/.vimrc"
