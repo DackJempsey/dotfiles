@@ -50,7 +50,8 @@ download_file() {
             print_success "Downloaded ${filename}"
             return 0
         else
-            print_error "Failed to download ${filename}"
+            print_error "Failed to download ${filename} from ${url}"
+            print_error "Please check your internet connection and verify the URL is accessible."
             return 1
         fi
     elif command -v wget &> /dev/null; then
@@ -58,7 +59,8 @@ download_file() {
             print_success "Downloaded ${filename}"
             return 0
         else
-            print_error "Failed to download ${filename}"
+            print_error "Failed to download ${filename} from ${url}"
+            print_error "Please check your internet connection and verify the URL is accessible."
             return 1
         fi
     else
@@ -112,28 +114,35 @@ main() {
     
     if [ "$DETECTED_SHELL" = "unknown" ]; then
         print_warning "Could not detect your shell automatically."
-        echo ""
-        echo "Which shell would you like to configure?"
-        echo "1) Bash"
-        echo "2) Zsh"
-        echo "3) Both"
-        read -p "Enter your choice (1-3): " shell_choice
         
-        case $shell_choice in
-            1)
-                INSTALL_SHELL="bash"
-                ;;
-            2)
-                INSTALL_SHELL="zsh"
-                ;;
-            3)
-                INSTALL_SHELL="both"
-                ;;
-            *)
-                print_error "Invalid choice. Exiting."
-                exit 1
-                ;;
-        esac
+        # Check if stdin is available for interactive input
+        if [ ! -t 0 ]; then
+            print_warning "No interactive terminal detected. Defaulting to Bash configuration."
+            INSTALL_SHELL="bash"
+        else
+            echo ""
+            echo "Which shell would you like to configure?"
+            echo "1) Bash"
+            echo "2) Zsh"
+            echo "3) Both"
+            read -t 30 -p "Enter your choice (1-3): " shell_choice
+            
+            case $shell_choice in
+                1)
+                    INSTALL_SHELL="bash"
+                    ;;
+                2)
+                    INSTALL_SHELL="zsh"
+                    ;;
+                3)
+                    INSTALL_SHELL="both"
+                    ;;
+                *)
+                    print_error "Invalid choice. Exiting."
+                    exit 1
+                    ;;
+            esac
+        fi
     else
         print_info "Detected shell: ${DETECTED_SHELL}"
         INSTALL_SHELL=$DETECTED_SHELL
@@ -156,8 +165,14 @@ main() {
         print_info "Installing Bash configuration..."
         
         # Download bash files
-        download_file ".bashrc" "${TEMP_DIR}/.bashrc"
-        download_file ".bash_profile" "${TEMP_DIR}/.bash_profile"
+        if ! download_file ".bashrc" "${TEMP_DIR}/.bashrc"; then
+            print_error "Failed to download Bash configuration files. Installation aborted."
+            exit 1
+        fi
+        if ! download_file ".bash_profile" "${TEMP_DIR}/.bash_profile"; then
+            print_error "Failed to download Bash configuration files. Installation aborted."
+            exit 1
+        fi
         
         # Backup and install
         backup_file "${HOME}/.bashrc"
@@ -173,8 +188,14 @@ main() {
         print_info "Installing Zsh configuration..."
         
         # Download zsh files
-        download_file ".zshrc" "${TEMP_DIR}/.zshrc"
-        download_file ".zprofile" "${TEMP_DIR}/.zprofile"
+        if ! download_file ".zshrc" "${TEMP_DIR}/.zshrc"; then
+            print_error "Failed to download Zsh configuration files. Installation aborted."
+            exit 1
+        fi
+        if ! download_file ".zprofile" "${TEMP_DIR}/.zprofile"; then
+            print_error "Failed to download Zsh configuration files. Installation aborted."
+            exit 1
+        fi
         
         # Backup and install
         backup_file "${HOME}/.zshrc"
@@ -188,7 +209,10 @@ main() {
     
     # Download and install vim configuration
     print_info "Installing Vim configuration..."
-    download_file ".vimrc" "${TEMP_DIR}/.vimrc"
+    if ! download_file ".vimrc" "${TEMP_DIR}/.vimrc"; then
+        print_error "Failed to download Vim configuration. Installation aborted."
+        exit 1
+    fi
     backup_file "${HOME}/.vimrc"
     cp "${TEMP_DIR}/.vimrc" "${HOME}/.vimrc"
     print_success "Vim configuration installed!"
