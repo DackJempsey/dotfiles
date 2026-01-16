@@ -1,5 +1,11 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
 # Enable reverse history search with arrow keys
 # This allows arrow-up to do incremental history search
 bind '"\e[A": history-search-backward'
@@ -8,12 +14,6 @@ bind '"\e[B": history-search-forward'
 # Set vim as the default editor
 export EDITOR=vim
 export VISUAL=vim
-
-# If not running interactively, don't do anything
-case $- in
-    *i*) ;;
-      *) return;;
-esac
 
 # Don't put duplicate lines or lines starting with space in the history
 HISTCONTROL=ignoreboth

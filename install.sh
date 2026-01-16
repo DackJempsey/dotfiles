@@ -17,8 +17,14 @@ create_symlink() {
     local source="$1"
     local target="$2"
     
-    # Backup existing file if it exists and is not a symlink
-    if [ -f "$target" ] && [ ! -L "$target" ]; then
+    # Check if source file exists
+    if [ ! -f "$source" ]; then
+        echo "Error: Source file $source does not exist"
+        return 1
+    fi
+    
+    # Backup existing file or directory if it exists and is not a symlink
+    if [ -e "$target" ] && [ ! -L "$target" ]; then
         echo "Backing up existing $target to $BACKUP_DIR"
         mv "$target" "$BACKUP_DIR/"
     elif [ -L "$target" ]; then
