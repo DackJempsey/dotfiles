@@ -73,7 +73,8 @@ download_file() {
 backup_file() {
     local filepath=$1
     if [ -f "${filepath}" ]; then
-        local backup_path="${filepath}.backup.$(date +%Y%m%d_%H%M%S)"
+        local backup_path
+        backup_path="${filepath}.backup.$(date +%Y%m%d_%H%M%S)"
         print_warning "Backing up existing ${filepath} to ${backup_path}"
         cp "${filepath}" "${backup_path}"
     fi
@@ -125,7 +126,7 @@ main() {
             echo "1) Bash"
             echo "2) Zsh"
             echo "3) Both"
-            read -t 60 -p "Enter your choice (1-3): " shell_choice
+            read -t 60 -r -p "Enter your choice (1-3): " shell_choice
             
             # Handle timeout or empty input
             if [ -z "$shell_choice" ]; then
@@ -161,7 +162,7 @@ main() {
     
     # Create temporary directory for downloads
     TEMP_DIR=$(mktemp -d)
-    trap "rm -rf ${TEMP_DIR}" EXIT
+    trap 'rm -rf "${TEMP_DIR}"' EXIT
     
     print_info "Using temporary directory: ${TEMP_DIR}"
     echo ""
