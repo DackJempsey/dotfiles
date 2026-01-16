@@ -4,7 +4,5 @@
 export EDITOR=vim
 export VISUAL=vim
 
-# Source .zshrc if it exists
-if [ -f ~/.zshrc ]; then
-    . ~/.zshrc
-fi
+# Note: .zshrc is automatically sourced by interactive shells
+# Add any login-shell-specific configurations here

@@ -5,10 +5,6 @@
 bindkey '^[[A' history-beginning-search-backward
 bindkey '^[[B' history-beginning-search-forward
 
-# Also bind for vi mode if enabled
-bindkey -M vicmd 'k' history-beginning-search-backward
-bindkey -M vicmd 'j' history-beginning-search-forward
-
 # History settings
 export HISTSIZE=10000
 export SAVEHIST=20000
