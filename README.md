@@ -24,6 +24,20 @@ A personal configuration repository for quickly setting up new development envir
 
 To use these configurations on a new machine:
 
+### One-Line Install (Recommended)
+
+The easiest way to install these dotfiles is using the installation script, which downloads files directly from GitHub without requiring git clone:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/DackJempsey/dotfiles/main/install.sh | bash
+```
+
+This script will:
+- Automatically detect your shell (Bash or Zsh)
+- Download the appropriate configuration files
+- Back up any existing configuration files
+- Install the new configurations to your home directory
+
 ### Quick Install (Symbolic Links)
 
 #### For Bash users:
