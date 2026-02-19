@@ -16,5 +16,11 @@ shopt -s histappend
 # Save multi-line commands as one command
 shopt -s cmdhist
 
+# Git branch for prompt
+__git_branch() {
+  local branch
+  branch=$(git symbolic-ref --short HEAD 2>/dev/null) && printf ' (%s)' "$branch"
+}
+
 # Customize your bash prompt (optional)
-PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;33m\]$(__git_branch)\[\033[00m\]\$ '

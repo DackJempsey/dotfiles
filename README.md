@@ -5,11 +5,13 @@ A personal configuration repository for quickly setting up new development envir
 
 ### Shell Configuration
 #### Bash (`.bashrc` and `.bash_profile`)
+- **Git branch in prompt**: Displays the current git branch name in yellow when inside a git repository (e.g., `user@host:~/project (main)$`)
 - **Reverse history search with arrow keys**: Press up/down arrows to search through your command history based on what you've typed
 - **Enhanced history settings**: Large history size with duplicate removal
 - **Vim as default editor**: Sets vim as the default editor for all applications
 
 #### Zsh (`.zshrc` and `.zprofile`)
+- **Git branch in prompt**: Displays the current git branch name in yellow when inside a git repository (e.g., `user@host:~/project (main)%`)
 - **Reverse history search with arrow keys**: Press up/down arrows to search through your command history based on what you've typed
 - **Enhanced history settings**: Large history size with duplicate removal, history sharing between sessions
 - **Vim as default editor**: Sets vim as the default editor for all applications

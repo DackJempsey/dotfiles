@@ -25,6 +25,12 @@ setopt SHARE_HISTORY
 # Save timestamp and duration in history
 setopt EXTENDED_HISTORY
 
+# Git branch for prompt
+autoload -Uz vcs_info
+precmd() { vcs_info }
+zstyle ':vcs_info:git:*' formats ' (%b)'
+setopt PROMPT_SUBST
+
 # Customize your zsh prompt (optional)
 # Using a simple colored prompt similar to bash
-PROMPT='%F{green}%n@%m%f:%F{blue}%~%f%# '
+PROMPT='%F{green}%n@%m%f:%F{blue}%~%f%F{yellow}${vcs_info_msg_0_}%f%# '
